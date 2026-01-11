@@ -1,0 +1,118 @@
+header {
+    background-color: rgba(17, 24, 39, 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+}
+
+header.scrolled {
+    padding: 10px 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--light);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.nav-icon {
+    margin-right: 8px;
+    color: var(--primary);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--gray);
+    font-weight: 500;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: var(--light);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.menu-icon {
+    display: none;
+    font-size: 1.8rem;
+    color: var(--light);
+    cursor: pointer;
+}
+
+@media screen and (max-width: 960px) {
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+        /* changed from absolute/top positioning for cleaner mobile view */
+        position: absolute;
+        top: 0;
+        /* Align with top but we need to push it down below header usually or handle z-index */
+        left: -100%;
+        opacity: 1;
+        transition: all 0.5s ease;
+        background: var(--darker);
+        justify-content: center;
+        align-items: center;
+        padding-top: 80px;
+        /* Spacer for header */
+    }
+
+    .nav-links.active {
+        left: 0;
+    }
+
+    .nav-links li {
+        margin: 20px 0;
+    }
+
+    .menu-icon {
+        display: block;
+        z-index: 1001;
+        /* Ensure above the menu */
+    }
+}
