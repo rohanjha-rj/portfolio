@@ -1,5 +1,5 @@
 {
-  "name": "portfolio-new",
+  "name": "rohanjharj_portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "canvas-confetti": "^1.9.4",
     "framer-motion": "^12.25.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

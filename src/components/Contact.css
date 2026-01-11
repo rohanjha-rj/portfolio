@@ -21,6 +21,56 @@
     margin-bottom: 30px;
 }
 
+.email-copy-wrapper {
+    position: relative;
+}
+
+.copy-icon {
+    font-size: 0.8rem;
+    color: var(--gray);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.contact-item p:hover .copy-icon {
+    opacity: 1;
+}
+
+.copy-tooltip {
+    position: absolute;
+    bottom: -25px;
+    left: 45px;
+    background: var(--success);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    animation: fadeInOut 2s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    85% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+}
+
 .contact-icon {
     width: 60px;
     height: 60px;

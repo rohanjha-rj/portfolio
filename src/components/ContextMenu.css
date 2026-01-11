@@ -1,0 +1,37 @@
+.custom-context-menu {
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.custom-context-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-context-menu li {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--light);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-size: 0.95rem;
+}
+
+.custom-context-menu li:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.custom-context-menu li svg {
+    font-size: 1.1em;
+    opacity: 0.8;
+}

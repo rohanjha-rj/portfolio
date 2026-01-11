@@ -6,6 +6,16 @@ footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Ensure content above footer has background to cover it */
+.contact {
+    background: var(--dark);
+    /* Opaque background needed */
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Shadow to enhance curtain effect */
+}
+
 .social-links {
     display: flex;
     justify-content: center;
@@ -25,8 +35,32 @@ footer {
     font-size: 1.2rem;
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
     text-decoration: none;
+    overflow: visible;
+    /* Allow tooltip */
+}
+
+/* Tooltip */
+.social-links a::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--primary);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .social-links a::before {

@@ -1,0 +1,140 @@
+.project-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.project-modal-card {
+    width: 100%;
+    max-width: 900px;
+    background: var(--darker);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: var(--light);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+}
+
+.modal-close:hover {
+    background: var(--error);
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.modal-img-container {
+    height: 400px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modal-img-container video,
+.modal-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-placeholder-img {
+    font-size: 6rem;
+    color: white;
+}
+
+.modal-info {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-status {
+    color: var(--secondary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.modal-info h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.modal-desc {
+    color: var(--gray);
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.modal-tag {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px 15px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 20px;
+    margin-top: auto;
+}
+
+@media (max-width: 768px) {
+    .modal-body {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-img-container {
+        height: 250px;
+    }
+
+    .modal-info {
+        padding: 25px;
+    }
+
+    .modal-info h2 {
+        font-size: 1.8rem;
+    }
+}

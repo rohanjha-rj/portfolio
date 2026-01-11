@@ -1,62 +1,120 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaChartLine, FaWallet, FaGamepad, FaCalendarAlt } from 'react-icons/fa';
+import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion';
+import { projects } from '../constants';
+import { useSound } from '../context/SoundContext';
 import './Projects.css';
+import ProjectModal from './ProjectModal';
+
+const ProjectCard = ({ project, onOpen, isAnyHovered, activeProjectIndex, index }) => {
+    const { playHover, playClick } = useSound();
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const rotateX = useTransform(mouseY, [-100, 100], [10, -10]);
+    const rotateY = useTransform(mouseX, [-100, 100], [-10, 10]);
+
+    const [isHovered, setIsHovered] = useState(false);
+
+    function handleMouseMove({ currentTarget, clientX, clientY }) {
+        const { left, top, width, height } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - (left + width / 2));
+        mouseY.set(clientY - (top + height / 2));
+    }
+
+    const isNextProject = activeProjectIndex !== null && index === activeProjectIndex + 1;
+
+    return (
+        <motion.div
+            layout
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{
+                opacity: (isAnyHovered && !isHovered && !isNextProject) ? 0.4 : 1,
+                scale: isHovered ? 1.05 : 1,
+                boxShadow: isNextProject ? '0 0 20px rgba(139, 92, 246, 0.3)' : 'none'
+            }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+            className={`project-card project-card-3d group ${isNextProject ? 'predictive-highlight' : ''}`}
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => {
+                setIsHovered(true);
+                playHover();
+                onOpen(null, index);
+            }}
+            onMouseLeave={() => {
+                setIsHovered(false);
+                mouseX.set(0);
+                mouseY.set(0);
+                onOpen(null, null);
+            }}
+            onClick={() => {
+                if (window.navigator.vibrate) window.navigator.vibrate(15);
+                playClick();
+                onOpen(project);
+            }}
+            style={{ rotateX, rotateY, cursor: 'pointer' }}
+        >
+            <motion.div
+                className="spotlight-overlay"
+                style={{
+                    background: useMotionTemplate`
+                        radial-gradient(
+                          450px circle at ${useTransform(mouseX, x => x + 160)}px ${useTransform(mouseY, y => y + 250)}px,
+                          rgba(139, 92, 246, 0.15),
+                          transparent 80%
+                        )
+                      `,
+                }}
+            />
+            <div className="project-img">
+                <motion.div
+                    className="depth-layer"
+                    style={{ x: useTransform(mouseX, x => x * 0.1), y: useTransform(mouseY, y => y * 0.1) }}
+                >
+                    {isHovered && project.demoVideo ? (
+                        <video
+                            src={project.demoVideo}
+                            autoPlay
+                            muted
+                            loop
+                            className="project-video-preview"
+                        />
+                    ) : (
+                        project.icon
+                    )}
+                </motion.div>
+                <div className="project-img-overlay" />
+            </div>
+
+            <div className="project-content">
+                <span className="project-status">{project.status}</span>
+                <h3>{project.title}</h3>
+                <p>{project.description}</p>
+                <div className="project-tags">
+                    {project.tags.map((tag, idx) => (
+                        <span className="project-tag" key={idx}>{tag}</span>
+                    ))}
+                </div>
+            </div>
+        </motion.div>
+    );
+};
 
 const Projects = () => {
     const [filter, setFilter] = useState('all');
-
-    const projects = [
-        {
-            id: 1,
-            title: "Smart Water Footprint Chatbot",
-            category: "ai",
-            status: "Ongoing",
-            description: "Created a chatbot with 80% NLP accuracy for water consumption tracking using JavaScript and JSON logic.",
-            tags: ["JavaScript", "NLP", "JSON"],
-            icon: <FaRobot />
-        },
-        {
-            id: 2,
-            title: "Stock Market Simulator",
-            category: "web",
-            status: "Live",
-            description: "Simulated 10+ real-time stock interactions with historical data and a virtual portfolio manager.",
-            tags: ["JavaScript", "React", "API"],
-            icon: <FaChartLine />
-        },
-        {
-            id: 3,
-            title: "Expense Tracker Web App",
-            category: "web",
-            status: "Live",
-            description: "Developed a daily budgeting tool with custom filtering and category-based breakdowns. Tracked 200+ mock transactions and achieved 85% test coverage.",
-            tags: ["HTML/CSS", "JavaScript", "Testing"],
-            icon: <FaWallet />
-        },
-        {
-            id: 4,
-            title: "Space Shooter Pro",
-            category: "game",
-            status: "Live",
-            description: "Built a 2D space shooting game featuring multiple levels, power-ups, boss battles, and weapon attachments for an engaging gameplay experience.",
-            tags: ["Game Dev", "Collision Detection", "Physics"],
-            icon: <FaGamepad />
-        },
-        {
-            id: 5,
-            title: "TimeTable Generator",
-            category: "web",
-            status: "Live",
-            description: "Built a web-based timetable generator using logic-based scheduling algorithms to handle faculty preferences, backup slots, and constraints across 8 semesters and 5 branches.",
-            tags: ["Algorithms", "Scheduling", "Web"],
-            icon: <FaCalendarAlt />
-        }
-    ];
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [activeProjectIndex, setActiveProjectIndex] = useState(null);
 
     const filteredProjects = filter === 'all'
         ? projects
         : projects.filter(project => project.category === filter);
+
+    const handleProjectAction = (project, index) => {
+        if (project === null) {
+            setActiveProjectIndex(index);
+        } else {
+            setSelectedProject(project);
+        }
+    };
 
     return (
         <section id="projects" className="projects">
@@ -75,7 +133,10 @@ const Projects = () => {
                         <button
                             key={cat}
                             className={`filter-btn ${filter === cat ? 'active' : ''}`}
-                            onClick={() => setFilter(cat)}
+                            onClick={() => {
+                                if (window.navigator.vibrate) window.navigator.vibrate(10);
+                                setFilter(cat);
+                            }}
                         >
                             {cat === 'all' ? 'All' : cat === 'web' ? 'Web Apps' : cat === 'ai' ? 'AI/ML' : 'Games'}
                         </button>
@@ -85,36 +146,39 @@ const Projects = () => {
                 <motion.div
                     layout
                     className="projects-grid"
+                    variants={{
+                        hidden: { opacity: 0 },
+                        show: {
+                            opacity: 1,
+                            transition: {
+                                staggerChildren: 0.1
+                            }
+                        }
+                    }}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true }}
                 >
-                    <AnimatePresence>
-                        {filteredProjects.map((project) => (
-                            <motion.div
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.3 }}
-                                className="project-card project-card-3d"
-                                key={project.id}
-                            >
-                                <div className="project-img">
-                                    {project.icon}
-                                </div>
-                                <div className="project-content">
-                                    <span className="project-status">{project.status}</span>
-                                    <h3>{project.title}</h3>
-                                    <p>{project.description}</p>
-                                    <div className="project-tags">
-                                        {project.tags.map((tag, idx) => (
-                                            <span className="project-tag" key={idx}>{tag}</span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
+                    <AnimatePresence mode="popLayout">
+                        {filteredProjects.map((project, idx) => (
+                            <ProjectCard
+                                key={project.id || idx}
+                                project={project}
+                                index={idx}
+                                activeProjectIndex={activeProjectIndex}
+                                isAnyHovered={activeProjectIndex !== null}
+                                onOpen={handleProjectAction}
+                            />
                         ))}
                     </AnimatePresence>
                 </motion.div>
             </div>
+
+            <ProjectModal
+                project={selectedProject}
+                isOpen={!!selectedProject}
+                onClose={() => setSelectedProject(null)}
+            />
         </section>
     );
 };

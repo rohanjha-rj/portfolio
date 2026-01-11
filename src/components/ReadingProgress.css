@@ -1,0 +1,94 @@
+.reading-progress-sidebar {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.progress-track {
+    width: 2px;
+    height: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+}
+
+.section-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    position: absolute;
+    right: -5px;
+}
+
+.section-dot-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.section-label {
+    position: absolute;
+    right: 25px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray);
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.3s;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.section-dot-wrapper:hover .section-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.section-dot-wrapper:hover .dot {
+    background: var(--primary);
+    transform: scale(1.4);
+}
+
+.section-dot-wrapper.active .dot {
+    background: var(--primary);
+    box-shadow: 0 0 10px var(--primary);
+    transform: scale(1.2);
+}
+
+.section-dot-wrapper.active .section-label {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--primary);
+}
+
+@media (max-width: 1200px) {
+    .reading-progress-sidebar {
+        display: none;
+    }
+}

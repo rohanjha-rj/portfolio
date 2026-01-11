@@ -1,0 +1,48 @@
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    /* Above everything */
+    color: var(--text);
+}
+
+.loader-content {
+    text-align: center;
+    width: 300px;
+}
+
+.loader-content h1 {
+    font-size: 2rem;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.loader-line-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.loader-line {
+    height: 100%;
+    background: var(--accent);
+}
+
+.loader-content p {
+    font-size: 0.9rem;
+    color: var(--gray);
+    letter-spacing: 2px;
+}

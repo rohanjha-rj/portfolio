@@ -1,37 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+import { experiences } from '../constants';
 import './Experience.css';
 
 const Experience = () => {
-    const experiences = [
-        {
-            role: "Cyber Security and Cyber Forensics Intern",
-            company: "Centre for Emerging Technologies",
-            duration: "09/2025 - PRESENT",
-            description: "Researched emerging cyber threats and forensic techniques, assisting in drafting security recommendations and strengthening incident response procedures."
-        },
-        {
-            role: "Software Development Intern",
-            company: "AngleTwo Innovations Pvt. Ltd.",
-            duration: "08/2025 - PRESENT",
-            description: "Work on real-time software projects, applying Agile methodologies and version control; collaborate with cross-functional teams, and engage in daily stand-ups and code reviews."
-        },
-        {
-            role: "3-D Printing and Additive Manufacturing Intern",
-            company: "C-DAC Kolkata",
-            duration: "08/2025 - PRESENT",
-            description: "Designed and optimized 3D models using CATIA V5 and slicing software, and successfully executed high-precision prototypes on advanced 3D printers, enhancing manufacturing efficiency and product quality."
-        },
-        {
-            role: "Web Developer and Trainer",
-            company: "Techglaz Labs Pvt. Ltd.",
-            duration: "05/2025 - PRESENT",
-            description: "Built and maintained 5+ production-ready web apps with 95%+ mobile responsiveness. Led training sessions for 80+ junior developers, resulting in 90% positive feedback and improved onboarding speed."
-        }
-    ];
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start end", "end end"]
+    });
+
+    const scaleY = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
 
     return (
-        <section id="experience" className="experience">
+        <section id="experience" className="experience" ref={containerRef}>
             <div className="container">
                 <motion.h2
                     initial={{ opacity: 0, y: 30 }}
@@ -43,6 +29,14 @@ const Experience = () => {
                 </motion.h2>
 
                 <div className="experience-container">
+                    {/* Progress Line */}
+                    <div className="timeline-progress-container">
+                        <motion.div
+                            className="timeline-progress-line"
+                            style={{ scaleY, transformOrigin: 'top' }}
+                        />
+                    </div>
+
                     {experiences.map((exp, index) => (
                         <motion.div
                             className="experience-item tilt-effect"
