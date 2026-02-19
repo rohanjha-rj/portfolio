@@ -1,9 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaQuoteLeft } from 'react-icons/fa';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Testimonials.css';
 
 const Testimonials = () => {
+    const { playClick, playHover } = useSound();
+
     const testimonials = [
         {
             text: "Rohan is an exceptional developer and mentor. His ability to explain complex concepts in simple terms helped our team quickly ramp up on new technologies.",
@@ -23,36 +27,36 @@ const Testimonials = () => {
         <section id="testimonials" className="testimonials">
             <div className="container">
                 <motion.h2
-                    initial={{ opacity: 0, y: 30 }}
+                    className="title-lg"
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
+                    style={{ textAlign: 'center' }}
                 >
-                    Testimonials
+                    Kind <span className="gradient-text">Words</span>
                 </motion.h2>
 
-                <div className="testimonials-container">
+                <div className="testimonials-grid-premium">
                     {testimonials.map((item, index) => (
                         <motion.div
-                            className="testimonial tilt-effect"
                             key={index}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.2 }}
+                            className="glass-card testimonial-card-premium"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
                             viewport={{ once: true }}
+                            onMouseEnter={playHover}
+                            onClick={() => { playClick(); triggerHaptic('light'); }}
                         >
-                            <div className="quote-icon">
+                            <div className="testimonial-quote-icon">
                                 <FaQuoteLeft />
                             </div>
-                            <div className="testimonial-text">
-                                <p>{item.text}</p>
-                            </div>
-                            <div className="testimonial-author">
-                                <div className="testimonial-avatar">{item.initials}</div>
-                                <div>
-                                    <h4>{item.author}</h4>
-                                    <p>{item.role}</p>
-                                </div>
+                            <p className="testimonial-content-text">"{item.text}"</p>
+                            <div className="testimonial-author-premium">
+                                <div className="testimonial-avatar-premium">{item.initials}</div>
+                                <h4 className="testimonial-author-name">{item.author}</h4>
+                                <p className="testimonial-author-role">{item.role}</p>
                             </div>
                         </motion.div>
                     ))}

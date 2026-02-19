@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Preloader.css';
 
-const Preloader = ({ setLoading }) => {
+const Preloader = ({ finishLoading }) => {
     useEffect(() => {
         const timer = setTimeout(() => {
-            setLoading(false);
+            if (finishLoading) finishLoading();
         }, 2000); // 2 seconds loader
         return () => clearTimeout(timer);
-    }, [setLoading]);
+    }, [finishLoading]);
 
     return (
         <motion.div

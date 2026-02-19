@@ -1,62 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaCode, FaTimes, FaBars } from 'react-icons/fa';
-import useMagnetic from '../hooks/useMagnetic';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaTimes, FaBars } from 'react-icons/fa';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Navbar.css';
-
-const MagneticLink = ({ children, href, onClick, onMouseEnter, onMouseLeave, hoveredLink, item }) => {
-    const { ref, springX, springY, handleMouseMove, handleMouseLeave, handleMouseEnter } = useMagnetic();
-
-    return (
-        <motion.div
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={() => { handleMouseEnter(); if (onMouseEnter) onMouseEnter(); }}
-            onMouseLeave={() => { handleMouseLeave(); if (onMouseLeave) onMouseLeave(); }}
-            style={{ x: springX, y: springY }}
-        >
-            <a href={href} onClick={onClick}>
-                {children}
-                {hoveredLink === item && (
-                    <motion.span
-                        layoutId="nav-spotlight"
-                        className="nav-spotlight"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                )}
-            </a>
-        </motion.div>
-    );
-};
 
 const Navbar = () => {
     const [click, setClick] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [hoveredLink, setHoveredLink] = useState(null);
+    const { playClick, playHover } = useSound();
 
-    const handleClick = () => setClick(!click);
+    const handleClick = () => {
+        triggerHaptic('light');
+        playClick();
+        setClick(!click);
+    };
+
     const closeMobileMenu = () => setClick(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setScrolled(true);
-            } else {
-                setScrolled(false);
-            }
+            setScrolled(window.scrollY > 50);
         };
-
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const navItems = ['About', 'Skills', 'Experience', 'Projects', 'Testimonials', 'Contact'];
 
     return (
         <header className={scrolled ? 'scrolled' : ''}>
             <div className="container">
                 <nav className="navbar">
                     <a href="#" className="logo" onClick={closeMobileMenu}>
-                        <FaCode className="nav-icon" />
-                        Rohan<span>.</span>
+                        ROHAN<span>JHA</span>
                     </a>
 
                     <div className="menu-icon" onClick={handleClick}>
@@ -64,18 +42,37 @@ const Navbar = () => {
                     </div>
 
                     <ul className={click ? 'nav-links active' : 'nav-links'}>
-                        {['About', 'Education', 'Skills', 'Experience', 'Projects', 'Testimonials', 'Contact'].map((item) => (
-                            <li key={item}>
-                                <MagneticLink
-                                    item={item}
+                        {navItems.map((item) => (
+                            <li
+                                key={item}
+                                onMouseEnter={() => {
+                                    playHover();
+                                    setHoveredLink(item);
+                                }}
+                                onMouseLeave={() => setHoveredLink(null)}
+                            >
+                                <a
                                     href={`#${item.toLowerCase()}`}
-                                    onClick={closeMobileMenu}
-                                    onMouseEnter={() => setHoveredLink(item)}
-                                    onMouseLeave={() => setHoveredLink(null)}
-                                    hoveredLink={hoveredLink}
+                                    onClick={() => {
+                                        triggerHaptic('light');
+                                        playClick();
+                                        closeMobileMenu();
+                                    }}
                                 >
                                     {item}
-                                </MagneticLink>
+                                    <AnimatePresence>
+                                        {hoveredLink === item && (
+                                            <motion.span
+                                                layoutId="nav-spotlight"
+                                                className="nav-spotlight"
+                                                initial={{ opacity: 0, scale: 0.9 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.9 }}
+                                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            />
+                                        )}
+                                    </AnimatePresence>
+                                </a>
                             </li>
                         ))}
                     </ul>

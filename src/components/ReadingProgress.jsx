@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './ReadingProgress.css';
 
 const ReadingProgress = () => {
     const { scrollYProgress } = useScroll();
     const [activeSection, setActiveSection] = useState('Home');
+
+    const { playClick, playHover } = useSound();
 
     const scaleY = useSpring(scrollYProgress, {
         stiffness: 100,
@@ -43,7 +47,12 @@ const ReadingProgress = () => {
                     <div
                         key={section}
                         className={`section-dot-wrapper ${activeSection === section ? 'active' : ''}`}
-                        onClick={() => document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => {
+                            triggerHaptic('light');
+                            playClick();
+                            document.getElementById(section.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
+                        }}
+                        onMouseEnter={playHover}
                     >
                         <span className="section-label">{section}</span>
                         <div className="dot" />

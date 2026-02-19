@@ -1,18 +1,19 @@
 header {
-    background-color: rgba(17, 24, 39, 0.95);
-    backdrop-filter: blur(10px);
+    background-color: var(--glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     position: fixed;
     width: 100%;
     top: 0;
     z-index: 1000;
-    padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.4s ease;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--glass-border);
+    transition: var(--transition-fast);
 }
 
 header.scrolled {
-    padding: 10px 0;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 0;
+    background-color: rgba(10, 9, 13, 0.8);
 }
 
 .navbar {
@@ -22,106 +23,85 @@ header.scrolled {
 }
 
 .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--light);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-main);
     text-decoration: none;
-    display: flex;
-    align-items: center;
+    letter-spacing: -0.02em;
 }
 
 .logo span {
     color: var(--primary);
 }
 
-.nav-icon {
-    margin-right: 8px;
-    color: var(--primary);
-}
-
 .nav-links {
     display: flex;
     list-style: none;
+    gap: 0.5rem;
 }
 
 .nav-links li {
-    margin-left: 30px;
+    position: relative;
 }
 
 .nav-links a {
     text-decoration: none;
-    color: var(--gray);
+    color: var(--text-muted);
     font-weight: 500;
-    transition: color 0.3s ease;
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    transition: var(--transition-fast);
+    display: block;
     position: relative;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--primary);
-    transition: width 0.3s ease;
+    z-index: 1;
 }
 
 .nav-links a:hover {
-    color: var(--light);
+    color: var(--text-main);
 }
-
-/* Removed the underline effect in favor of spotlight */
-/* .nav-links a:hover::after {
-    width: 100%;
-} */
 
 .nav-spotlight {
     position: absolute;
     inset: 0;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    background: var(--glass-hover);
+    border: 1px solid var(--glass-border);
     z-index: -1;
 }
 
 .menu-icon {
     display: none;
-    font-size: 1.8rem;
-    color: var(--light);
+    font-size: 1.5rem;
+    color: var(--text-main);
     cursor: pointer;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1024px) {
     .nav-links {
         display: flex;
         flex-direction: column;
         width: 100%;
         height: 100vh;
-        /* changed from absolute/top positioning for cleaner mobile view */
         position: absolute;
         top: 0;
-        /* Align with top but we need to push it down below header usually or handle z-index */
         left: -100%;
-        opacity: 1;
-        transition: all 0.5s ease;
-        background: var(--darker);
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        background: var(--bg-dark);
         justify-content: center;
         align-items: center;
-        padding-top: 80px;
-        /* Spacer for header */
+        gap: 2rem;
     }
 
     .nav-links.active {
         left: 0;
     }
 
-    .nav-links li {
-        margin: 20px 0;
+    .nav-links a {
+        font-size: 1.5rem;
     }
 
     .menu-icon {
         display: block;
         z-index: 1001;
-        /* Ensure above the menu */
     }
 }

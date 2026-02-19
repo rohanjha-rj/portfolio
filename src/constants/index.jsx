@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaRobot, FaChartLine, FaWallet, FaGamepad, FaCalendarAlt, FaDumbbell, FaHeart, FaCode, FaUniversity, FaGhost, FaShieldAlt, FaPaintBrush, FaServer, FaTools, FaGlobe } from 'react-icons/fa';
+import { FaRobot, FaChartLine, FaWallet, FaGamepad, FaCalendarAlt, FaDumbbell, FaHeart, FaCode, FaUniversity, FaGhost, FaShieldAlt, FaPaintBrush, FaServer, FaTools, FaGlobe, FaShoppingCart, FaUserMd } from 'react-icons/fa';
 
 export const projects = [
     {
@@ -109,6 +109,24 @@ export const projects = [
         description: "Platform for private tutors to list courses, schedules, and student testimonials.",
         tags: ["Web", "Educational", "Service"],
         icon: <FaUniversity />
+    },
+    {
+        id: 13,
+        title: "Preque",
+        category: "web",
+        status: "Live",
+        description: "A full stack website for a clothing-based startup consisting of payments, admin panel and more.",
+        tags: ["Full Stack", "Payments", "Admin Panel"],
+        icon: <FaShoppingCart />
+    },
+    {
+        id: 14,
+        title: "2Basil",
+        category: "web",
+        status: "Ongoing",
+        description: "A doctor-patient based consulting platform.",
+        tags: ["Healthcare", "Consulting", "Web"],
+        icon: <FaUserMd />
     }
 ];
 

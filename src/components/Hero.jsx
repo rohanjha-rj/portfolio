@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaDownload } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { FaDownload, FaArrowRight } from 'react-icons/fa';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Hero.css';
-import Wave from './Wave';
 
 const Hero = () => {
     const [text, setText] = useState('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [loopNum, setLoopNum] = useState(0);
     const [typingSpeed, setTypingSpeed] = useState(150);
+    const { playClick, playHover } = useSound();
 
     const words = ["CS Undergraduate", "Web Developer", "Designer", "Tech Enthusiast"];
 
@@ -23,10 +24,10 @@ const Hero = () => {
                 : fullText.substring(0, text.length + 1)
             );
 
-            setTypingSpeed(isDeleting ? 30 : 150);
+            setTypingSpeed(isDeleting ? 40 : 120);
 
             if (!isDeleting && text === fullText) {
-                setTimeout(() => setIsDeleting(true), 1500); // Pause at end
+                setTimeout(() => setIsDeleting(true), 2000);
             } else if (isDeleting && text === '') {
                 setIsDeleting(false);
                 setLoopNum(loopNum + 1);
@@ -38,77 +39,93 @@ const Hero = () => {
     }, [text, isDeleting, loopNum, typingSpeed]);
 
     return (
-        <section className="hero">
-            <div className="floating-icons">
-                <motion.div
-                    className="floating-icon"
-                    style={{ top: '20%', left: '10%' }}
-                    animate={{ y: [0, -20, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
-                    <FaHtml5 />
-                </motion.div>
-                <motion.div
-                    className="floating-icon"
-                    style={{ top: '60%', left: '5%' }}
-                    animate={{ y: [0, 20, 0] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                >
-                    <FaCss3Alt />
-                </motion.div>
-                <motion.div
-                    className="floating-icon"
-                    style={{ top: '30%', right: '15%' }}
-                    animate={{ y: [0, -15, 0] }}
-                    transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                >
-                    <FaJs />
-                </motion.div>
-                <motion.div
-                    className="floating-icon"
-                    style={{ top: '70%', right: '10%' }}
-                    animate={{ y: [0, 15, 0] }}
-                    transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                >
-                    <FaReact />
-                </motion.div>
-            </div>
+        <section id="home" className="hero">
+            <div className="hero-glow"></div>
 
             <div className="container">
                 <div className="hero-content">
-                    <motion.h1
-                        className="gradient-text glitch"
-                        data-text="Rohan Kumar Jha"
-                        initial={{ opacity: 0, y: -50 }}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        Rohan Kumar Jha
+                        <span className="hero-badge">Available for Work</span>
+                    </motion.div>
+
+                    <motion.span
+                        className="hero-greeting shimmer-text"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        Hello, Design Universe
+                    </motion.span>
+                    <motion.h1
+                        className="hero-name shimmer-text"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                    >
+                        ROHAN<span>JHA</span>
                     </motion.h1>
+
+                    <motion.h1
+                        className="title-xl main-title"
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 1, delay: 0.4 }}
+                    >
+                        TRANSFORMING <span className="gradient-text">IDEAS</span> <br />
+                        INTO DIGITAL <span className="glow-text">REALITY</span>
+                    </motion.h1>
+
                     <motion.p
-                        className="typewriter"
+                        className="hero-subtitle"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
+                        transition={{ duration: 1, delay: 0.4 }}
                     >
-                        I am a <span style={{ color: 'var(--primary)', fontWeight: 'bold' }}>{text}</span>
-                        <span className="cursor">|</span>
+                        Hi, I'm <span className="highlight">Rohan Kumar Jha</span>, a {text}
+                        <span className="cursor-blink">|</span>
                     </motion.p>
+
                     <motion.div
-                        className="hero-btns"
-                        initial={{ opacity: 0, y: 50 }}
+                        className="hero-actions"
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
+                        transition={{ duration: 1, delay: 0.6 }}
                     >
-                        <a href="#projects" className="btn glow-on-hover">View My Work</a>
-                        <a href="#contact" className="btn btn-outline glow-on-hover">Contact Me</a>
-                        <a href="/resume.pdf" download className="btn download-btn glow-on-hover" id="downloadResume">
-                            <FaDownload style={{ marginRight: '8px' }} /> Download Resume
+                        <a
+                            href="#projects"
+                            className="btn-premium btn-primary"
+                            onMouseEnter={playHover}
+                            onClick={() => { playClick(); triggerHaptic('medium'); }}
+                        >
+                            View Projects <FaArrowRight size={14} />
+                        </a>
+                        <a
+                            href="/resume.pdf"
+                            download
+                            className="btn-premium btn-outline"
+                            onMouseEnter={playHover}
+                            onClick={() => { playClick(); triggerHaptic('heavy'); }}
+                        >
+                            <FaDownload size={14} /> Resume
                         </a>
                     </motion.div>
                 </div>
             </div>
-            <Wave direction="down" />
+
+            <motion.div
+                className="scroll-indicator"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.2 }}
+            >
+                <div className="mouse">
+                    <div className="wheel"></div>
+                </div>
+            </motion.div>
         </section>
     );
 };

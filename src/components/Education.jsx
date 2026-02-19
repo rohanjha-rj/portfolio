@@ -1,11 +1,14 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { education } from '../constants';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Education.css';
 import Wave from './Wave';
 
 const Education = () => {
     const containerRef = useRef(null);
+    const { playClick, playHover } = useSound();
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start end", "end end"]
@@ -25,6 +28,7 @@ const Education = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
                     viewport={{ once: true }}
+                    onMouseEnter={playHover}
                 >
                     Education
                 </motion.h2>
@@ -46,7 +50,11 @@ const Education = () => {
                             transition={{ duration: 0.6, delay: index * 0.2 }}
                             viewport={{ once: true }}
                         >
-                            <div className="timeline-content tilt-effect">
+                            <div
+                                className="timeline-content tilt-effect"
+                                onMouseEnter={playHover}
+                                onClick={() => { playClick(); triggerHaptic('light'); }}
+                            >
                                 <h3>{edu.institution}</h3>
                                 <p>{edu.degree}</p>
                                 <p>{edu.duration}</p>

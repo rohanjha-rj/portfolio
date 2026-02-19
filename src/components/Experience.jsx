@@ -1,57 +1,49 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { experiences } from '../constants';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Experience.css';
 
 const Experience = () => {
-    const containerRef = useRef(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end end"]
-    });
-
-    const scaleY = useSpring(scrollYProgress, {
-        stiffness: 100,
-        damping: 30,
-        restDelta: 0.001
-    });
+    const { playClick, playHover } = useSound();
 
     return (
-        <section id="experience" className="experience" ref={containerRef}>
+        <section id="experience" className="experience">
             <div className="container">
                 <motion.h2
-                    initial={{ opacity: 0, y: 30 }}
+                    className="title-lg shimmer-text"
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
+                    transition={{ duration: 0.8 }}
                     viewport={{ once: true }}
                 >
-                    Work Experience
+                    Professional <span className="gradient-text">Journey</span>
                 </motion.h2>
 
-                <div className="experience-container">
-                    {/* Progress Line */}
-                    <div className="timeline-progress-container">
-                        <motion.div
-                            className="timeline-progress-line"
-                            style={{ scaleY, transformOrigin: 'top' }}
-                        />
-                    </div>
-
+                <div className="experience-timeline">
                     {experiences.map((exp, index) => (
                         <motion.div
-                            className="experience-item tilt-effect"
                             key={index}
-                            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                            className="experience-item-wrapper"
+                            initial={{ opacity: 0, x: -20 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.2 }}
-                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                            viewport={{ once: true, margin: "-100px" }}
                         >
-                            <div className="experience-header">
-                                <h3>{exp.role}</h3>
-                                <span className="experience-duration">{exp.duration}</span>
+                            <div className="experience-node"></div>
+                            <div
+                                className="glass-card experience-item-premium"
+                                onMouseEnter={playHover}
+                                onClick={() => { playClick(); triggerHaptic('light'); }}
+                            >
+                                <div className="exp-header">
+                                    <h3 className="exp-role">{exp.role}</h3>
+                                    <span className="exp-duration">{exp.duration}</span>
+                                </div>
+                                <span className="exp-company">{exp.company}</span>
+                                <p className="exp-desc">{exp.description}</p>
                             </div>
-                            <p className="experience-company"><strong>{exp.company}</strong></p>
-                            <p className="experience-description">{exp.description}</p>
                         </motion.div>
                     ))}
                 </div>

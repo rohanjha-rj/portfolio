@@ -1,91 +1,54 @@
 footer {
-    background: var(--darker);
-    color: white;
-    padding: 60px 0 30px;
+    padding: 6rem 0 3rem;
+    border-top: 1px solid var(--glass-border);
+    background-color: var(--glass);
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Ensure content above footer has background to cover it */
-.contact {
-    background: var(--dark);
-    /* Opaque background needed */
-    position: relative;
-    z-index: 10;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    /* Shadow to enhance curtain effect */
+.footer-content h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
 }
 
-.social-links {
+.footer-content p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.footer-socials {
     display: flex;
     justify-content: center;
-    gap: 25px;
-    margin: 30px 0;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
 }
 
-.social-links a {
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.08);
-    color: var(--light);
-    border-radius: 50%;
+.footer-social-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    position: relative;
-    text-decoration: none;
-    overflow: visible;
-    /* Allow tooltip */
+    color: var(--text-main);
+    font-size: 1.25rem;
+    transition: var(--transition-fast);
 }
 
-/* Tooltip */
-.social-links a::after {
-    content: attr(aria-label);
-    position: absolute;
-    bottom: 110%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
+.footer-social-btn:hover {
     background: var(--primary);
     color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
+    border-color: var(--primary);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px -5px var(--primary-glow);
 }
 
-.social-links a:hover::after {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-.social-links a::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.7s ease;
-    z-index: 1;
-}
-
-.social-links a:hover::before {
-    left: 100%;
-}
-
-.social-links a:hover {
-    background: linear-gradient(to right, var(--primary), var(--primary-dark));
-    transform: translateY(-5px) rotate(5deg);
-}
-
-.copyright {
-    margin-top: 30px;
-    color: var(--gray);
-    font-size: 0.9rem;
+.footer-copyright {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    border-top: 1px solid var(--glass-border);
+    padding-top: 2rem;
+    margin-top: 2rem;
 }

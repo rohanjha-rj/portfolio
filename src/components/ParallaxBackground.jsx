@@ -24,8 +24,8 @@ const ParallaxBackground = () => {
                 animate={{
                     background: [
                         'radial-gradient(circle, var(--primary), transparent)',
-                        'radial-gradient(circle, var(--secondary), transparent)',
                         'radial-gradient(circle, var(--accent), transparent)',
+                        'radial-gradient(circle, var(--secondary), transparent)',
                         'radial-gradient(circle, var(--primary), transparent)',
                     ],
                     scale: [1, 1.2, 0.9, 1],
@@ -46,8 +46,8 @@ const ParallaxBackground = () => {
                 animate={{
                     background: [
                         'radial-gradient(circle, var(--secondary), transparent)',
-                        'radial-gradient(circle, var(--accent), transparent)',
                         'radial-gradient(circle, var(--primary), transparent)',
+                        'radial-gradient(circle, var(--accent), transparent)',
                         'radial-gradient(circle, var(--secondary), transparent)',
                     ],
                     scale: [1, 0.8, 1.1, 1],
@@ -63,13 +63,13 @@ const ParallaxBackground = () => {
                 }}
             />
 
-            {/* Shape 3: Mid Center (Moves faster) */}
+            {/* Shape 3: Mid Center */}
             <motion.div
                 animate={{
                     background: [
                         'radial-gradient(circle, var(--accent), transparent)',
-                        'radial-gradient(circle, var(--primary), transparent)',
                         'radial-gradient(circle, var(--secondary), transparent)',
+                        'radial-gradient(circle, var(--primary), transparent)',
                         'radial-gradient(circle, var(--accent), transparent)',
                     ],
                     scale: [1, 1.3, 1, 1],

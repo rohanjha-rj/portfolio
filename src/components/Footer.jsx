@@ -1,55 +1,47 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaLinkedin, FaGithub, FaInstagram, FaEnvelope } from 'react-icons/fa';
-import useMagnetic from '../hooks/useMagnetic';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './Footer.css';
 
-const MagneticSocial = ({ children, href, ariaLabel }) => {
-    const { ref, springX, springY, handleMouseMove, handleMouseLeave, handleMouseEnter } = useMagnetic();
-
-    return (
-        <motion.div
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            style={{ x: springX, y: springY }}
-        >
-            <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={ariaLabel}
-            >
-                {children}
-            </a>
-        </motion.div>
-    );
-};
-
 const Footer = () => {
+    const { playClick, playHover } = useSound();
+
+    const socials = [
+        { icon: <FaLinkedin />, href: "https://www.linkedin.com/in/rohanjharj/", label: "LinkedIn" },
+        { icon: <FaGithub />, href: "https://github.com/rohanjha-rj", label: "GitHub" },
+        { icon: <FaInstagram />, href: "https://instagram.com/rohanjha.rj/", label: "Instagram" },
+        { icon: <FaEnvelope />, href: "mailto:jharohan2005@gmail.com", label: "Email" }
+    ];
+
     return (
         <footer>
-            <div className="container">
-                <h3>Rohan Kumar Jha</h3>
-                <p>Computer Science and Engineering Student</p>
+            <div className="container footer-content">
+                <h3>ROHAN<span>JHA</span></h3>
+                <p>Computer Science & Engineering Student</p>
 
-                <div className="social-links">
-                    <MagneticSocial href="https://www.linkedin.com/in/rohanjharj/" ariaLabel="LinkedIn">
-                        <FaLinkedin />
-                    </MagneticSocial>
-                    <MagneticSocial href="https://github.com/rohanjha-rj" ariaLabel="GitHub">
-                        <FaGithub />
-                    </MagneticSocial>
-                    <MagneticSocial href="https://instagram.com/rohanjha.rj/" ariaLabel="Instagram">
-                        <FaInstagram />
-                    </MagneticSocial>
-                    <MagneticSocial href="mailto:jharohan2005@gmail.com" ariaLabel="Email">
-                        <FaEnvelope />
-                    </MagneticSocial>
+                <div className="footer-socials">
+                    {socials.map((social, index) => (
+                        <motion.a
+                            key={index}
+                            href={social.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="footer-social-btn"
+                            aria-label={social.label}
+                            onMouseEnter={playHover}
+                            onClick={() => { playClick(); triggerHaptic('light'); }}
+                            whileHover={{ y: -5 }}
+                        >
+                            {social.icon}
+                        </motion.a>
+                    ))}
                 </div>
 
-                <p className="copyright">&copy; {new Date().getFullYear()} Rohan Kumar Jha. All rights reserved.</p>
+                <p className="footer-copyright">
+                    &copy; {new Date().getFullYear()} Rohan Kumar Jha. Crafted with passion.
+                </p>
             </div>
         </footer>
     );

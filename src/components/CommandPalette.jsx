@@ -2,18 +2,21 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSearch, FaHome, FaUser, FaCode, FaEnvelope, FaFileAlt, FaMoon, FaSun } from 'react-icons/fa';
 import ReactDOM from 'react-dom';
+import { useSound } from '../context/SoundContext';
+import { triggerHaptic } from '../utils';
 import './CommandPalette.css';
 
 const CommandPalette = ({ isOpen, setIsOpen }) => {
     const [query, setQuery] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const { playClick, playHover } = useSound();
 
     const commands = [
         { id: 'home', label: 'Go to Home', icon: <FaHome />, action: () => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsOpen(false); } },
         { id: 'about', label: 'About Me', icon: <FaUser />, action: () => { document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' }); setIsOpen(false); } },
         { id: 'projects', label: 'View Projects', icon: <FaCode />, action: () => { document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); setIsOpen(false); } },
         { id: 'contact', label: 'Contact Me', icon: <FaEnvelope />, action: () => { document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); setIsOpen(false); } },
-        { id: 'resume', label: 'Download Resume', icon: <FaFileAlt />, action: () => { /* Add resume Link */ setIsOpen(false); } },
+        { id: 'resume', label: 'Download Resume', icon: <FaFileAlt />, action: () => { window.open('/resume.pdf', '_blank'); setIsOpen(false); } },
     ];
 
     const filteredCommands = query === ''
@@ -26,11 +29,13 @@ const CommandPalette = ({ isOpen, setIsOpen }) => {
         } else if (e.key === 'ArrowUp') {
             setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % filteredCommands.length);
         } else if (e.key === 'Enter') {
+            triggerHaptic('medium');
+            playClick();
             filteredCommands[selectedIndex]?.action();
         } else if (e.key === 'Escape') {
             setIsOpen(false);
         }
-    }, [filteredCommands, selectedIndex, setIsOpen]);
+    }, [filteredCommands, selectedIndex, setIsOpen, playClick]);
 
     useEffect(() => {
         if (isOpen) {
@@ -71,8 +76,12 @@ const CommandPalette = ({ isOpen, setIsOpen }) => {
                             <div
                                 key={command.id}
                                 className={`cp-item ${idx === selectedIndex ? 'active' : ''}`}
-                                onMouseEnter={() => setSelectedIndex(idx)}
-                                onClick={command.action}
+                                onMouseEnter={() => { setSelectedIndex(idx); playHover(); }}
+                                onClick={() => {
+                                    triggerHaptic('medium');
+                                    playClick();
+                                    command.action();
+                                }}
                             >
                                 <span className="cp-item-icon">{command.icon}</span>
                                 <span className="cp-item-label">{command.label}</span>
